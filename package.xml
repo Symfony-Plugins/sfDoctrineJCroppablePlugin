@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package packagerversion="1.4.6" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
+ <name>sfDoctrineJCroppablePlugin</name>
+ <channel>plugins.symfony-project.org</channel>
+ <summary>Javascript image cropper integrated with doctrine</summary>
+ <description>Effortlessly add images to your models with an incredibly easy-to-use javascript image cropper (jcrop).
+
+The plugin will also automatically create and save the cropped images for you, in sizes you can configure.
+ </description>
+ <lead>
+  <name>Rich Birch</name>
+  <user>uncleringo</user>
+  <email>rich@trafficdigital.com</email>
+  <active>yes</active>
+ </lead>
+ <date>2009-10-12</date>
+ <time>23:40:00</time>
+ <version>
+  <release>1.0.1</release>
+  <api>1.0.0</api>
+ </version>
+ <stability>
+  <release>stable</release>
+  <api>stable</api>
+ </stability>
+ <license uri="http://www.symfony-project.org/license">MIT license</license>
+ <notes>-</notes>
+ <contents>
+  <dir name="/">
+   <file role="data" name="README" />
+   <file role="data" name="LICENSE" />
+   <dir name="config">
+   </dir>
+   <dir name="lib">
+    <dir name="doctrine">
+     <!-- doctrine behaviour classes -->
+     <dir name="Listener">
+      <file role="data" name="JCroppable.php" />
+     </dir>
+     <file role="data" name="JCroppable.php" />
+    </dir>
+    <dir name="widget">
+     <!-- widgets -->
+     <file role="data" name="sfWidgetFormInputImageJCroppable.class.php" />
+    </dir>
+   </dir>
+  </dir>
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>5.2.0</min>
+   </php>
+   <pearinstaller>
+    <min>1.4.1</min>
+   </pearinstaller>
+   <package>
+    <name>symfony</name>
+    <channel>pear.symfony-project.com</channel>
+    <min>1.2.0</min>
+    <max>1.3.0</max>
+   </package>
+  </required>
+ </dependencies>
+ <phprelease />
+ <changelog />
+</package>
