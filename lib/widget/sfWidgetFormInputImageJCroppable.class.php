@@ -77,16 +77,17 @@ class sfWidgetFormInputFileInputImageJCroppable extends sfWidgetFormInputFile
     if ($this->getOption('with_delete'))
     {
       $deleteName = ']' == substr($name, -1) ? substr($name, 0, -1).'_delete]' : $name.'_delete';
+      $formOptions = $this->getOption('form_options');
 
       if (isset($formOptions['embedded']) && $formOptions['embedded'])
       {
-        $delete = $this->renderTag('input', array_merge(array('type' => 'checkbox', 'name' => $deleteName), $attributes));
-        $deleteLabel = $this->renderContentTag('label', $this->getOption('delete_label'), array_merge(array('for' => $this->generateId($deleteName))));
+        $delete = link_to('Delete this image', '@' . $formOptions['parent_model'] . '?action=deleteImage&model=' . get_class($object) . '&id=' . $object->getId());
+        $deleteLabel = '';
       }
       else
       {
-        $delete = '';//link_to('Delete this image', '@episode?action=deleteImage&model=EpisodeImage&id=' . $object->getId());
-        $deleteLabel = '';
+        $delete = $this->renderTag('input', array_merge(array('type' => 'checkbox', 'name' => $deleteName), $attributes));
+        $deleteLabel = $this->renderContentTag('label', $this->getOption('delete_label'), array_merge(array('for' => $this->generateId($deleteName))));
       }
     }
     else
