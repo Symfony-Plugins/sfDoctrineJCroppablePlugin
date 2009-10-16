@@ -100,7 +100,7 @@ class Doctrine_Template_JCroppable extends Doctrine_Template
       
       $form->setWidget($fieldName, 
         new sfWidgetFormInputFileInputImageJCroppable(array(
-          'model_object' => $this->getInvoker(),
+          'invoker' => $this->getInvoker(),
           'image_field' => $fieldName,
           'image_ratio' => isset($imageConfig['ratio']) ? $imageConfig['ratio'] : false,
           'with_delete' => true,
@@ -212,6 +212,25 @@ class Doctrine_Template_JCroppable extends Doctrine_Template
     $fileSrc = '/' . $fileDir . '/' . $this->getImageFromName($fieldName, $size);
     
     return $fileSrc;
+  }
+
+  /**
+   * Returns an img tag for the specified image field & size (default thumb)
+   *
+   * @param string $fieldName
+   * @param string $size
+   * @param array $attributes
+   * @return string
+   */
+  public function getImageTag($fieldName, $size = 'thumb', $attributes = array())
+  {
+    return tag(
+      'img',
+      array_merge(
+        $attributes,
+        array('src' => $this->getImageSrc($fieldName, $size))
+      )
+    );
   }
   
   /**
@@ -480,14 +499,17 @@ class Doctrine_Template_JCroppable extends Doctrine_Template
   private function createChildFormClass()
   {
     $tableName = $this->getTableNameCamelCase();
+
+    $baseForm = $tableName . 'Form';
+    $extendedForm = 'JCroppable' . $baseForm;
     
-    if (!class_exists($tableName . 'Form'))
+    if (!class_exists($tableName . 'Form') || class_exists($extendedForm))
     {
       return false;
     }
 
     $class = '
-class JCroppable' . $tableName . 'Form extends ' . $tableName . 'Form
+class ' . $extendedForm . ' extends ' . $baseForm . '
 {
 
   public function configure()
