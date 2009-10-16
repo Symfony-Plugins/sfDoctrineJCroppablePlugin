@@ -13,10 +13,10 @@ The plugin will also automatically create and save the cropped images for you, i
   <email>rich@trafficdigital.com</email>
   <active>yes</active>
  </lead>
- <date>2009-10-13</date>
- <time>11:40:00</time>
+ <date>2009-10-16</date>
+ <time>13:25:00</time>
  <version>
-  <release>1.0.2</release>
+  <release>1.0.3</release>
   <api>1.0.0</api>
  </version>
  <stability>
@@ -24,7 +24,6 @@ The plugin will also automatically create and save the cropped images for you, i
   <api>stable</api>
  </stability>
  <license uri="http://www.symfony-project.org/license">MIT license</license>
- <license>MIT</license>
  <notes>-</notes>
  <contents>
   <dir name="/">
@@ -67,6 +66,22 @@ The plugin will also automatically create and save the cropped images for you, i
  <changelog>
   <release>
    <version>
+    <release>1.0.3</release>
+    <api>1.0.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://www.symfony-project.com/license">MIT license</license>
+   <date>2009-10-16</date>
+   <notes>
+    Added getImageTag public method for ease of use on frontend
+    Renamed 'model_object' option to 'invoker'
+   </notes>
+  </release>
+  <release>
+   <version>
     <release>1.0.2</release>
     <api>1.0.0</api>
    </version>
@@ -75,6 +90,7 @@ The plugin will also automatically create and save the cropped images for you, i
     <api>stable</api>
    </stability>
    <license uri="http://www.symfony-project.com/license">MIT license</license>
+   <license>MIT</license>
    <date>2009-10-13</date>
    <notes>
     More improvements to the readme
@@ -90,6 +106,7 @@ The plugin will also automatically create and save the cropped images for you, i
     <api>stable</api>
    </stability>
    <license uri="http://www.symfony-project.com/license">MIT license</license>
+   <license>MIT</license>
    <date>2009-10-12</date>
    <notes>
     Fixed some typos, and improved the readme
