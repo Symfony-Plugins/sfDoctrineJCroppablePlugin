@@ -17,7 +17,7 @@ The plugin will also automatically create and save the cropped images for you, i
  <time>13:25:00</time>
  <version>
   <release>1.0.3</release>
-  <api>1.0.0</api>
+  <api>1.0.3</api>
  </version>
  <stability>
   <release>stable</release>
@@ -67,7 +67,7 @@ The plugin will also automatically create and save the cropped images for you, i
   <release>
    <version>
     <release>1.0.3</release>
-    <api>1.0.0</api>
+    <api>1.0.3</api>
    </version>
    <stability>
     <release>stable</release>
