@@ -1,11 +1,24 @@
 sfDoctrineJCroppablePlugin
 ==========================
 
-Effortlessly add images to your models with an incredibly easy-to-use javascript
-image cropper (jcrop).
+This plugin allows you to effortlessly add image editing capabilities to your
+admin generator backend. You'll be able to add images to your models and be
+presented with the awesome Jcrop (http://deepliquid.com/content/Jcrop.html)
+jQuery plugin.
 
-The plugin will also automatically create and save the cropped images for you,
-in sizes you can configure.
+
+Features
+--------
+
+The plugin already has a few very useful features
+
+* Create as many different sized crops of each of your image fields as you like
+* Add any amount of coloured padding around the croppable image
+* Fix the aspect ratio of the cropper to add consistency to your images'
+  dimensions
+* Change the directory that uploaded images are stored in
+* Use the getImageSrc() method in your frontend app to easily display your
+  neatly cropped images
 
 Installation
 ------------
@@ -13,26 +26,24 @@ Installation
 To install the plugin for a symfony project, the usual process is to use the
 symfony command line:
 
-    php symfony plugin:install --install-deps sfDoctrineJCroppablePlugin
+    php symfony plugin:install sfDoctrineJCroppablePlugin
 
 sfDoctrineJCroppablePlugin depends on the excellent sfImageTransformPlugin, but
-until I can figure out how to specify that dependancy in the package then you'll
+until I can figure out how to specify that dependency in the package then you'll
 have to install it yourself (it's getting late!)
 
     php symfony plugin:install sfImageTransformPlugin
 
-If for some reason this fails (eg you're running symfony 1.3) then you can
-manually download the tgz file from
+If the installation of either package fails (because you're running symfony 1.3
+for example) then you can manually download the tgz files from
 
     http://plugins.symfony-project.org/get/sfImageTransformPlugin/sfImageTransformPlugin-1.2.0.tgz
+    http://plugins.symfony-project.org/get/sfDoctrineJCroppablePlugin/sfDoctrineJCroppablePlugin-1.0.2.tgz
 
-and then ask symfony to install the downloaded file
+and then ask symfony to install the downloaded files
 
     php symfony plugin:install sfImageTransformPlugin-1.2.0.tgz
-
-If you're using symfony 1.3 then you may find there's not yet a version of
-sfImageTransformPlugin for it, but we have found that version 1.2 (the latest as
-of this writing) works just fine.
+    php symfony plugin:install sfDoctrineJCroppablePlugin-1.0.2.tgz
 
 Enable the plugins if necessary by editing config/ProjectConfiguration.class.php:
 
@@ -43,7 +54,7 @@ Symfony 1.2 & Doctrine 1.0
 --------------------------
 
 If you're using symfony 1.2 which comes with doctrine 1.0 this plugin will not
-be able to delete the old versions of it's images when it creates new ones. This
+be able to delete the old versions of its images when it creates new ones. This
 is because we've not been able to find a way of getting the old filename.
 Upgrading to doctrine 1.1 fixes this and is a reasonably straightforward
 exorcise. There is a good guide here:
@@ -56,8 +67,8 @@ Symfony 1.3 comes with doctrine 1.2 and so this is not an issue.
 Usage
 -----
 
-You'll first want to edit your config/doctrine/schema.yml to add the behaviour
-to one of your models:
+You'll first want to edit config/doctrine/schema.yml to add the behaviour to one
+of your models:
 
     Person:
       actAs:
@@ -114,7 +125,7 @@ editing apps/backend/config/view.yml:
 
 We're almost finished now! Just two things left to do. First we have to
 configure the widget & validator for our jcroppable image field. Add the
-following calls to configure the widgets & validators to the form's confgure
+following calls to configure the widgets & validators to the form's configure
 function (lib/form/doctrine/PersonForm.class.php):
 
     public function configure()
@@ -124,13 +135,13 @@ function (lib/form/doctrine/PersonForm.class.php):
     }
 
 And finally create the upload directory for the images to be stored in and make
-them writable:
+them writeable:
 
     mkdir -p web/uploads/images/Person
     chmod 777 web/uploads/images/Person
 
 That's it! Now if you followed the instructions carefully then you should be
-able to aim your browser at your backend app's person module and add a few
+able to aim your browser at the backend app's person module and add a few
 people and their mug shots.
 
 To show the images in your frontend templates, simply pass a Person object, and
