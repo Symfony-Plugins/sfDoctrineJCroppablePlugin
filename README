@@ -17,7 +17,7 @@ The plugin already has a few very useful features
 * Fix the aspect ratio of the cropper to add consistency to your images'
   dimensions
 * Change the directory that uploaded images are stored in
-* Use the getImageSrc() method in your frontend app to easily display your
+* Use the getImageSrc() or getImageTag() method in your frontend app to easily display your
   neatly cropped images
 
 Installation
@@ -145,10 +145,14 @@ able to aim your browser at the backend app's person module and add a few
 people and their mug shots.
 
 To show the images in your frontend templates, simply pass a Person object, and
-call the getImageSrc() function, passing the desired size, eg
+call the getImageSrc() or the getImageTag() function, passing the desired image
+& size, eg
 
     <img src="<?php echo $person->getImageSrc('mugshot', 'thumb') ?>" alt="Mug shot!" />
 
+or
+
+    <?php echo $person->getImageTag('mugshot', 'thumb') ?>
 
 Configuration
 -------------
