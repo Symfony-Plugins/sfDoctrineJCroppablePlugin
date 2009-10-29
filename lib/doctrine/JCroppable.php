@@ -106,7 +106,7 @@ class Doctrine_Template_JCroppable extends Doctrine_Template
           'with_delete' => true,
           'file_src' => $this->getImageSrc($fieldName, 'editable'),
           'template'  => '%file%<br />%input%<br />%delete% %delete_label%',
-          'form_options' => $formOptions
+          'form' => $form
         ))
       );
       

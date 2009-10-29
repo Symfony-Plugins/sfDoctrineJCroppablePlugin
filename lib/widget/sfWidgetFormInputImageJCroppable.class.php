@@ -25,7 +25,7 @@ class sfWidgetFormInputFileInputImageJCroppable extends sfWidgetFormInputFile
    *                    * delete (the delete checkbox)
    *                    * delete_label (the delete label text)
    *                    * file (the file tag)
-   *  * form_options:
+   *  * form:
    *
    * In edit mode, this widget renders an additional widget named after the
    * file upload widget with a "_delete" suffix. So, when creating a form,
@@ -46,11 +46,11 @@ class sfWidgetFormInputFileInputImageJCroppable extends sfWidgetFormInputFile
     $this->addRequiredOption('file_src');
     $this->addOption('with_delete', true);
     $this->addOption('delete_label', 'remove the current file');
-    $this->addOption('image_field', true);
-    $this->addOption('image_ratio', true);
-    $this->addOption('invoker', true);
+    $this->addOption('image_field', null);
+    $this->addOption('image_ratio', null);
+    $this->addOption('invoker', null);
     $this->addOption('template', '%file%<br />%input%<br />%delete% %delete_label%');
-    $this->addOption('form_options', true);
+    $this->addOption('form', null);
   }
 
   /**
@@ -77,11 +77,11 @@ class sfWidgetFormInputFileInputImageJCroppable extends sfWidgetFormInputFile
     if ($this->getOption('with_delete'))
     {
       $deleteName = ']' == substr($name, -1) ? substr($name, 0, -1).'_delete]' : $name.'_delete';
-      $formOptions = $this->getOption('form_options');
+      $form = $this->getOption('form');
 
-      if (isset($formOptions['embedded']) && $formOptions['embedded'] && !empty($formOptions['parent_model']))
+      if ($form->getOption('embedded', false) && $form->getOption('parent_model', false))
       {
-        $delete = $formOptions['parent_model']->getDeleteLinkFor($object);
+        $delete = $form->getOption('parent_model')->getDeleteLinkFor($object);
         $deleteLabel = '';
       }
       else
@@ -154,20 +154,20 @@ class sfWidgetFormInputFileInputImageJCroppable extends sfWidgetFormInputFile
   }
 
   private function getIdStub() {
-    $formOptions = $this->getOption('form_options', array());
+    $form = $this->getOption('form');
     $separator = '';
 
     $imageName = $this->getOption('image_field');
-    $tableName = $this->getOption('invoker')->getTable()->getTableName();
+    $tableName = $form->getObject()->getTable()->getTableName();
     
-    if (isset($formOptions['embedded']) && $formOptions['embedded'])
+    if ($form->getOption('embedded'))
     {
-      $tableNameCamelCase = preg_replace('/(?:^|_)(.?)/e',"strtoupper('$1')", $tableName);
+      $parentTableName = $form->getOption('parent_model')->getTable()->getTableName();
       
-      $separator = 'Embedded' . $tableNameCamelCase . '_' . $tableName .
+      $separator = 'embedded' . $tableName . '_' . $tableName .
         '_' . $this->getOption('invoker')->getId();
 
-      $idStub = $formOptions['parent_model']->getTable()->getTableName() . '_' . $separator . '_' . $imageName;
+      $idStub = $parentTableName . '_' . $separator . '_' . $imageName;
     }
     else
     {
