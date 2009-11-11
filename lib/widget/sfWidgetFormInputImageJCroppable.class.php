@@ -74,6 +74,11 @@ class sfWidgetFormInputFileInputImageJCroppable extends sfWidgetFormInputFile
       return $input;
     }
 
+    if (class_exists('sfJSLibManager'))
+    {
+      sfJSLibManager::addLib('jcrop');
+    }
+
     if ($this->getOption('with_delete'))
     {
       $deleteName = ']' == substr($name, -1) ? substr($name, 0, -1).'_delete]' : $name.'_delete';
