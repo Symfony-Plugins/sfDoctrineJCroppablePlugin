@@ -3,7 +3,7 @@
  <name>sfDoctrineJCroppablePlugin</name>
  <channel>plugins.symfony-project.org</channel>
  <summary>Javascript image cropper integrated with doctrine</summary>
- <description>Effortlessly add images to your models with an incredibly easy-to-use javascript image cropper (jcrop).
+ <description>Effortlessly add user-croppable images to your models with an incredibly easy-to-use javascript image cropper (jcrop).
 
 The plugin will also automatically create and save the cropped images for you, in sizes you can configure.
  </description>
@@ -13,11 +13,11 @@ The plugin will also automatically create and save the cropped images for you, i
   <email>rich@trafficdigital.com</email>
   <active>yes</active>
  </lead>
- <date>2009-10-16</date>
+ <date>2009-11-11</date>
  <time>13:25:00</time>
  <version>
-  <release>1.0.3</release>
-  <api>1.0.3</api>
+  <release>1.0.4</release>
+  <api>1.0.4</api>
  </version>
  <stability>
   <release>stable</release>
@@ -64,6 +64,25 @@ The plugin will also automatically create and save the cropped images for you, i
  </dependencies>
  <phprelease />
  <changelog>
+  <release>
+   <version>
+    <release>1.0.4</release>
+    <api>1.0.4</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://www.symfony-project.com/license">MIT license</license>
+   <date>2009-11-11</date>
+   <notes>
+    Made field ids non-camelcase
+    Changed to take form rather than form_options as option since form has getOption method anyway
+    Changed embedded form prefix from 'embedded' to 'embedded_'
+    Using the widgetschema's name format instead of the model's table name for the id stub in order to play nicely with inheritance
+    Added detection and use of sfJSLibManager::addLib('jcrop') if found (from sfJSLibManagerPlugin)
+   </notes>
+  </release>
   <release>
    <version>
     <release>1.0.3</release>

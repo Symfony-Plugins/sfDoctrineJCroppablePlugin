@@ -176,14 +176,14 @@ your config/app.yml:
 
 Let's run through these options:
 
-  * directory - overrides the default web/uploads/images/Person to instead be
-      web/uploads/people
-  * padding - adds padding to the image, of the specified color, using either a
-      'percent' or 'pixels' value
-  * ratio - fixes the aspect ratio of the cropper and therefore the generated
-      cropped images
-  * sizes - allows you to specify any number of different sized images to be
-      created. You specify the width ad the height will be calculated using the
-      ratio if there is one, otherwise it will be variable according to the
-      selected crop. The default sizes are thumb (width 120px) &
-      main (width 360px)
+* directory - overrides the default web/uploads/images/Person to instead be
+    web/uploads/people
+* padding - adds padding to the image, of the specified color, using either a
+    'percent' or 'pixels' value
+* ratio - fixes the aspect ratio of the cropper and therefore the generated
+    cropped images
+* sizes - allows you to specify any number of different sized images to be
+    created. You specify the width and the height will be calculated using the
+    ratio if there is one, otherwise it will be variable according to the
+    selected crop. The default sizes are thumb (width 120px) &
+    main (width 360px)
