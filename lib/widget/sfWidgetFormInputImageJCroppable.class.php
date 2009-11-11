@@ -158,8 +158,8 @@ class sfWidgetFormInputFileInputImageJCroppable extends sfWidgetFormInputFile
     $separator = '';
 
     $imageName = $this->getOption('image_field');
-    $tableName = $form->getObject()->getTable()->getTableName();
-    
+    $tableName = str_replace("[%s]", '', $form->getWidgetSchema()->getNameFormat());
+
     if ($form->getOption('embedded'))
     {
       $parentTableName = $form->getOption('parent_model')->getTable()->getTableName();
