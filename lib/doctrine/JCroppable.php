@@ -90,7 +90,7 @@ class Doctrine_Template_JCroppable extends Doctrine_Template
    * 
    * @param sfForm $form
    */
-  public function configureJCropWidgets(sfForm &$form, $formOptions = array()) {
+  public function configureJCropWidgets(sfForm $form, $formOptions = array()) {
     
     foreach ($this->_options['images'] as $fieldName) {
       if (!$imageConfig = $this->getImageConfig($fieldName))
@@ -124,7 +124,7 @@ class Doctrine_Template_JCroppable extends Doctrine_Template
    * 
    * @param sfForm $form
    */
-  public function configureJCropValidators(&$form) {
+  public function configureJCropValidators($form) {
     
     foreach ($this->_options['images'] as $fieldName) {
       
