@@ -13,11 +13,11 @@ The plugin will also automatically create and save the cropped images for you, i
   <email>rich@trafficdigital.com</email>
   <active>yes</active>
  </lead>
- <date>2009-11-11</date>
+ <date>2009-11-17</date>
  <time>13:25:00</time>
  <version>
-  <release>1.0.4</release>
-  <api>1.0.4</api>
+  <release>1.0.5</release>
+  <api>1.0.5</api>
  </version>
  <stability>
   <release>stable</release>
@@ -64,6 +64,21 @@ The plugin will also automatically create and save the cropped images for you, i
  </dependencies>
  <phprelease />
  <changelog>
+  <release>
+   <version>
+    <release>1.0.5</release>
+    <api>1.0.5</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://www.symfony-project.com/license">MIT license</license>
+   <date>2009-11-17</date>
+   <notes>
+    Fix to get rid of warnings when using PHP 5.3.x as reported by Gunther Konig
+   </notes>
+  </release>
   <release>
    <version>
     <release>1.0.4</release>
