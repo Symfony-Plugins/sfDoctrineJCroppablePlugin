@@ -8,6 +8,7 @@
  */
 class sfWidgetFormInputFileInputImageJCroppable extends sfWidgetFormInputFile
 {
+  private $hasImage = false;
   /**
    * Constructor.
    *
@@ -45,7 +46,7 @@ class sfWidgetFormInputFileInputImageJCroppable extends sfWidgetFormInputFile
     
     $this->addRequiredOption('file_src');
     $this->addOption('with_delete', true);
-    $this->addOption('delete_label', 'remove the current file');
+    $this->addOption('delete_label', 'remove the current image');
     $this->addOption('image_field', null);
     $this->addOption('image_ratio', null);
     $this->addOption('invoker', null);
@@ -74,12 +75,15 @@ class sfWidgetFormInputFileInputImageJCroppable extends sfWidgetFormInputFile
       return $input;
     }
 
+    $this->hasImage = (false !== $this->getOption('file_src')
+      && substr($this->getOption('file_src'), -1) != '/');
+
     if (class_exists('sfJSLibManager'))
     {
       sfJSLibManager::addLib('jcrop');
     }
 
-    if ($this->getOption('with_delete'))
+    if ($this->hasImage && $this->getOption('with_delete'))
     {
       $deleteName = ']' == substr($name, -1) ? substr($name, 0, -1).'_delete]' : $name.'_delete';
       $form = $this->getOption('form');
@@ -108,7 +112,7 @@ class sfWidgetFormInputFileInputImageJCroppable extends sfWidgetFormInputFile
   {
     $id = $this->getIdStub() . '_img';
     
-    return false !== $this->getOption('file_src')
+    return $this->hasImage
       ?
         $this->renderTag(
           'img',
@@ -121,7 +125,7 @@ class sfWidgetFormInputFileInputImageJCroppable extends sfWidgetFormInputFile
           )
         )
       :
-        '';
+        '<span>No image</span>';
     
   }
   
