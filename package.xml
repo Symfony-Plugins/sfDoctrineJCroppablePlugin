@@ -13,11 +13,11 @@ The plugin will also automatically create and save the cropped images for you, i
   <email>rich@trafficdigital.com</email>
   <active>yes</active>
  </lead>
- <date>2010-01-12</date>
+ <date>2010-01-20</date>
  <time>13:00:00</time>
  <version>
-  <release>1.0.6</release>
-  <api>1.0.6</api>
+  <release>1.0.7</release>
+  <api>1.0.7</api>
  </version>
  <stability>
   <release>stable</release>
@@ -58,12 +58,29 @@ The plugin will also automatically create and save the cropped images for you, i
     <name>symfony</name>
     <channel>pear.symfony-project.com</channel>
     <min>1.2.0</min>
-    <max>1.4.2</max>
+    <max>2.0.0</max>
+    <exclude>2.0.0</exclude>
    </package>
   </required>
  </dependencies>
  <phprelease />
  <changelog>
+  <release>
+   <version>
+    <release>1.0.7</release>
+    <api>1.0.7</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://www.symfony-project.com/license">MIT license</license>
+   <license>MIT</license>
+   <date>2010-01-20</date>
+   <notes>
+    Another attempt to get the packaging right!
+   </notes>
+  </release>
   <release>
    <version>
     <release>1.0.6</release>
@@ -74,6 +91,7 @@ The plugin will also automatically create and save the cropped images for you, i
     <api>stable</api>
    </stability>
    <license uri="http://www.symfony-project.com/license">MIT license</license>
+   <license>MIT</license>
    <date>2010-01-12</date>
    <notes>
     Updated release to reflect compatibility with symfony 1.4
