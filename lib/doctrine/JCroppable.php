@@ -253,30 +253,59 @@ class Doctrine_Template_JCroppable extends Doctrine_Template
     }
     
     $dir = $this->getImageDir();
-    
+
+    $from = $dir . DIRECTORY_SEPARATOR . $editable;
+    $to = $dir . DIRECTORY_SEPARATOR . $original;
+
     /**
-     * Move the new image to be named as the original
+     * If we can't find the image
      */
-    rename($dir . DIRECTORY_SEPARATOR . $editable, $dir . DIRECTORY_SEPARATOR . $original);
-    //print("mv $editable $original<br/>");exit;
+    if (!file_exists($from))
+    {
+      /**
+       * Check if we're loading data rather than saving via the admin interface
+       *  and look for the image in the data/images dir
+       */
+      if (!sfContext::hasInstance() && file_exists('data/images/' . $editable))
+      {
+        print('Found data/images/' . $editable . "\n");
+        copy('data/images/' . $editable, $to);
+      }
+      /**
+       * We don't have the original for some reason and we can't find a data
+       * copy so best just return
+       */
+      else
+      {
+        return;
+      }
+    }
+    else
+    {
+      /**
+       * Move the new image to be named as the original
+       */
+      rename($from, $to);
+    }
+    
     /**
      * Load the original and resize it for the editable version
      */
     $img = new sfImage($dir . DIRECTORY_SEPARATOR . $original);
     
-    if (isset($imageConfig['padding'])) {
+    if (sfContext::hasInstance() && isset($imageConfig['padding'])) {
       $img = $this->addPadding($img, $imageConfig['padding']);
       
       $img->saveAs($dir . DIRECTORY_SEPARATOR . $original);
+      
+      $this->getInvoker()->{$fieldName . '_x1'} = 0;
+      $this->getInvoker()->{$fieldName . '_y1'} = 0;
+      $this->getInvoker()->{$fieldName . '_x2'} = $img->getWidth();
+      $this->getInvoker()->{$fieldName . '_y2'} = $img->getHeight();
     }
-    
+
     $img->resize(400, null);
     $img->saveAs($dir . DIRECTORY_SEPARATOR . $editable);
-    
-    $this->getInvoker()->{$fieldName . '_x1'} = 0;
-    $this->getInvoker()->{$fieldName . '_y1'} = 0;
-    $this->getInvoker()->{$fieldName . '_x2'} = $img->getWidth();
-    $this->getInvoker()->{$fieldName . '_y2'} = $img->getHeight();
   }
   
   /**
