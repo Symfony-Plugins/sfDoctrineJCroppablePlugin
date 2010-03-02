@@ -306,6 +306,11 @@ class Doctrine_Template_JCroppable extends Doctrine_Template
 
     $img->resize(400, null);
     $img->saveAs($dir . DIRECTORY_SEPARATOR . $editable);
+
+    $this->getInvoker()->{$fieldName . '_x1'} = 0;
+    $this->getInvoker()->{$fieldName . '_y1'} = 0;
+    $this->getInvoker()->{$fieldName . '_x2'} = $img->getWidth();
+    $this->getInvoker()->{$fieldName . '_y2'} = $img->getHeight();
   }
   
   /**
@@ -445,12 +450,12 @@ class Doctrine_Template_JCroppable extends Doctrine_Template
     
     $origCrop = $this->originalImages[$fieldName]
       ->crop($dims['x'], $dims['y'], $dims['w'], $dims['h']);
-      
+
     $finalCrop = $origCrop->resize(
       $imageConfig['sizes'][$size]['width'],
       empty($imageConfig['ratio']) ?
         null :
-        $imageConfig['sizes'][$size]['width'] / $imageConfig['ratio']);
+        round($imageConfig['sizes'][$size]['width'] / $imageConfig['ratio']));
     
     $fullPath = $this->getImageDir() . DIRECTORY_SEPARATOR . $this->getImageFromName($fieldName, $size);
     
