@@ -269,14 +269,14 @@ class Doctrine_Template_JCroppable extends Doctrine_Template
       if (!sfContext::hasInstance() && file_exists('data/images/' . $editable))
       {
         print('Found data/images/' . $editable . "... ");
-        if (is_writable('data/images/' . $to))
+        if (is_writable($dir) && (!file_exists($to) || is_writable($to)))
         {
           copy('data/images/' . $editable, $to);
           print("copied\n");
         }
         else
         {
-          print("Don't have permission to copy\n");
+          print("Don't have permission to copy to $to\n");
         }
       }
       /**
@@ -299,8 +299,9 @@ class Doctrine_Template_JCroppable extends Doctrine_Template
     /**
      * Check we have permission to save the images
      */
-    if (!is_writable($dir . DIRECTORY_SEPARATOR . $editable)
-          || !is_writable($dir . DIRECTORY_SEPARATOR . $original))
+    if (!is_writable($dir)
+          || (file_exists($dir . DIRECTORY_SEPARATOR . $editable) && !is_writable($dir . DIRECTORY_SEPARATOR . $editable))
+          || (file_exists($dir . DIRECTORY_SEPARATOR . $original) && !is_writable($dir . DIRECTORY_SEPARATOR . $original)))
     {
       if (sfContext::hasInstance())
       {
@@ -308,7 +309,7 @@ class Doctrine_Template_JCroppable extends Doctrine_Template
         " . $dir . DIRECTORY_SEPARATOR . $editable . "
         " . $dir . DIRECTORY_SEPARATOR . $original);
       }
-      
+      print("damn\n");
       return;
     }
     
