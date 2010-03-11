@@ -268,8 +268,16 @@ class Doctrine_Template_JCroppable extends Doctrine_Template
        */
       if (!sfContext::hasInstance() && file_exists('data/images/' . $editable))
       {
-        print('Found data/images/' . $editable . "\n");
-        copy('data/images/' . $editable, $to);
+        print('Found data/images/' . $editable . "... ");
+        if (is_writable('data/images/' . $to))
+        {
+          copy('data/images/' . $editable, $to);
+          print("copied\n");
+        }
+        else
+        {
+          print("Don't have permission to copy\n");
+        }
       }
       /**
        * We don't have the original for some reason and we can't find a data
@@ -286,6 +294,22 @@ class Doctrine_Template_JCroppable extends Doctrine_Template
        * Move the new image to be named as the original
        */
       rename($from, $to);
+    }
+
+    /**
+     * Check we have permission to save the images
+     */
+    if (!is_writable($dir . DIRECTORY_SEPARATOR . $editable)
+          || !is_writable($dir . DIRECTORY_SEPARATOR . $original))
+    {
+      if (sfContext::hasInstance())
+      {
+        sfContext::getInstance()->getLogger()->debug("Can't save image(s). Maybe it/they exist already or the dir doesn't have write permission
+        " . $dir . DIRECTORY_SEPARATOR . $editable . "
+        " . $dir . DIRECTORY_SEPARATOR . $original);
+      }
+      
+      return;
     }
     
     /**
