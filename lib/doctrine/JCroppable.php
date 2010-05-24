@@ -186,9 +186,9 @@ class Doctrine_Template_JCroppable extends Doctrine_Template
    * @return string
    */
   private function getImageDirWeb() {
-	$webDir = str_replace('\\', '/', sfConfig::get('sf_web_dir'));
-	$imageDir = str_replace('\\', '/', $this->getImageDir());
-	
+    $webDir = str_replace('\\', '/', sfConfig::get('sf_web_dir'));
+    $imageDir = str_replace('\\', '/', $this->getImageDir());
+
     return (string)str_replace($webDir . '/', '', $imageDir);
   }
   
@@ -209,9 +209,16 @@ class Doctrine_Template_JCroppable extends Doctrine_Template
       print("image upload directory <strong>$fileDir</strong> is not writable");
     }
     
-    $fileSrc = '/' . $fileDir . '/' . $this->getImageFromName($fieldName, $size);
-    
-    return $fileSrc;
+    //if there is no pic do not return the broken markup
+    if ($this->getImageFromName($fieldName, $size) != false)
+    {
+      $fileSrc = '/' . $fileDir . '/' . $this->getImageFromName($fieldName, $size);
+      return $fileSrc;
+    }
+    else
+    {
+      return false;
+    }
   }
 
   /**
@@ -224,13 +231,20 @@ class Doctrine_Template_JCroppable extends Doctrine_Template
    */
   public function getImageTag($fieldName, $size = 'thumb', $attributes = array())
   {
-    return tag(
-      'img',
-      array_merge(
+    if ($this->getImageSrc($fieldName, $size) != false)
+    {
+      return tag(
+        'img',
+        array_merge(
         $attributes,
         array('src' => $this->getImageSrc($fieldName, $size))
-      )
-    );
+        )
+      );
+    }
+    else
+    {
+      return '';
+    }
   }
   
   /**
