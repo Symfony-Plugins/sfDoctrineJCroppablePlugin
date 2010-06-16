@@ -9,6 +9,9 @@
 class sfWidgetFormInputFileInputImageJCroppable extends sfWidgetFormInputFile
 {
   private $hasImage = false;
+
+  protected $idStub;
+
   /**
    * Constructor.
    *
@@ -87,11 +90,13 @@ class sfWidgetFormInputFileInputImageJCroppable extends sfWidgetFormInputFile
     {
       $deleteName = ']' == substr($name, -1) ? substr($name, 0, -1).'_delete]' : $name.'_delete';
       $form = $this->getOption('form');
-
+      
       if ($form->getOption('embedded', false) && $form->getOption('parent_model', false))
       {
         $delete = $form->getOption('parent_model')->getDeleteLinkFor($object);
         $deleteLabel = '';
+//        $delete = '';
+//        $deleteLabel = '';
       }
       else
       {
@@ -162,7 +167,14 @@ class sfWidgetFormInputFileInputImageJCroppable extends sfWidgetFormInputFile
     return $js;
   }
 
-  private function getIdStub() {
+  public function getIdStub(){
+    if(!$this->idStub){
+      $this->idStub = $this->setIdStub();
+    }
+    return $this->idStub;
+  }
+
+  protected function setIdStub() {
     $form = $this->getOption('form');
     $separator = '';
 
@@ -177,6 +189,7 @@ class sfWidgetFormInputFileInputImageJCroppable extends sfWidgetFormInputFile
         '_' . $this->getOption('invoker')->getId();
 
       $idStub = $parentTableName . '_' . $separator . '_' . $imageName;
+      $idStub = preg_replace('/\W/', '_', $idStub);
     }
     else
     {

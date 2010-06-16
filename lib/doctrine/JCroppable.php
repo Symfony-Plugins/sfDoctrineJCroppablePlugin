@@ -41,7 +41,7 @@ class Doctrine_Template_JCroppable extends Doctrine_Template
       foreach (array('x1', 'y1', 'x2', 'y2') as $suffix) {
         $this->hasColumn($fieldName . '_' . $suffix, 'integer', null, array('type' => 'integer'));
       }
-    } 
+    }
     
     $this->addListener(new Doctrine_Template_Listener_JCroppable($this->_options));
 
@@ -111,7 +111,10 @@ class Doctrine_Template_JCroppable extends Doctrine_Template
       );
       
       foreach (array('x1', 'y1', 'x2', 'y2') as $suffix) {
-        $form->setWidget($fieldName . '_' . $suffix, new sfWidgetFormInputHidden());
+        $id_stub = $form->getWidget($fieldName)->getIdStub();
+        $widget = new sfWidgetFormInputHidden();
+        $widget->setAttribute('id', $id_stub. '_' . $suffix);
+        $form->setWidget($fieldName . '_' . $suffix, $widget);
       }
     }
   }
@@ -202,10 +205,10 @@ class Doctrine_Template_JCroppable extends Doctrine_Template
   public function getImageSrc($fieldName, $size = 'thumb') {
     $fileDir = $this->getImageDirWeb();
     
-    if (!file_exists($fileDir)) {
+    if (!$this->checkDirectoryExists($fileDir)) {
       print("image upload directory <strong>$fileDir</strong> doesn't exist");
     }
-    if (!is_writable($fileDir)) {
+    if (!$this->checkDirectoryWritable($fileDir)) {
       print("image upload directory <strong>$fileDir</strong> is not writable");
     }
     
@@ -219,6 +222,16 @@ class Doctrine_Template_JCroppable extends Doctrine_Template
     {
       return false;
     }
+  }
+
+  public function checkDirectoryExists($fileDir){
+    $root = sfConfig::get('sf_root_dir');
+    return file_exists($root.'/web/'.$fileDir);
+  }
+
+  public function checkDirectoryWritable($fileDir){
+    $root = sfConfig::get('sf_root_dir');
+    return is_writable($root.'/web/'.$fileDir);
   }
 
   /**
