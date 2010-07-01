@@ -206,10 +206,10 @@ class Doctrine_Template_JCroppable extends Doctrine_Template
     $fileDir = $this->getImageDirWeb();
     
     if (!$this->checkDirectoryExists($fileDir)) {
-      print("image upload directory <strong>$fileDir</strong> doesn't exist");
+      $this->sfLog("image upload directory <strong>$fileDir</strong> doesn't exist");
     }
     if (!$this->checkDirectoryWritable($fileDir)) {
-      print("image upload directory <strong>$fileDir</strong> is not writable");
+      $this->sfLog("image upload directory <strong>$fileDir</strong> is not writable");
     }
     
     //if there is no pic do not return the broken markup
@@ -330,13 +330,9 @@ class Doctrine_Template_JCroppable extends Doctrine_Template
           || (file_exists($dir . DIRECTORY_SEPARATOR . $editable) && !is_writable($dir . DIRECTORY_SEPARATOR . $editable))
           || (file_exists($dir . DIRECTORY_SEPARATOR . $original) && !is_writable($dir . DIRECTORY_SEPARATOR . $original)))
     {
-      if (sfContext::hasInstance())
-      {
-        sfContext::getInstance()->getLogger()->debug("Can't save image(s). Maybe it/they exist already or the dir doesn't have write permission
+      $this->sfLog("Can't save image(s). Maybe it/they exist already or the dir doesn't have write permission
         " . $dir . DIRECTORY_SEPARATOR . $editable . "
         " . $dir . DIRECTORY_SEPARATOR . $original);
-      }
-      print("damn\n");
       return;
     }
     
@@ -608,5 +604,16 @@ class ' . $extendedForm . ' extends ' . $baseForm . '
 }';
     
     eval($class);
+  }
+
+  protected function sfLog($message)
+  {
+    /**
+     * Log to symfony debug bar
+     */
+    if (class_exists('sfContext') && sfContext::hasInstance())
+    {
+      sfContext::getInstance()->getLogger()->debug($message);
+    }
   }
 }
