@@ -64,19 +64,16 @@ class Doctrine_Template_JCroppable extends Doctrine_Template
    * @param string $fieldName
    */
   public function updateImage($fieldName) {
-//    die($fieldName);
     $oldValues = $this->getInvoker()->getModified(true);
-    
-    if (!empty($oldValues[$fieldName]) && $oldValues[$fieldName] != $this->getInvoker()->$fieldName) {
-      
+
+    if (!empty($oldValues[$fieldName]) && $oldValues[$fieldName] != $this->getInvoker()->$fieldName)
+    {
       $this->removeImages($fieldName, $oldValues[$fieldName]);
-      
     }
 
-    if (in_array($fieldName, array_keys($this->getInvoker()->getModified()))) {
-
+    if (in_array($fieldName, array_keys($this->getInvoker()->getModified())))
+    {
       $this->createEditableImage($fieldName);
-      
     }
     
     $this->createCrops($fieldName);
@@ -155,7 +152,7 @@ class Doctrine_Template_JCroppable extends Doctrine_Template
    * @return string
    */
   private function getImageDir() {
-    $config = sfConfig::get('app_sfDoctrineJCroppablePlugin_models');
+    $config = $this->getModelsConfig();
     
     $basePath = sfConfig::get('sf_upload_dir');
     
@@ -345,20 +342,93 @@ class Doctrine_Template_JCroppable extends Doctrine_Template
       $img = $this->addPadding($img, $imageConfig['padding']);
       
       $img->saveAs($dir . DIRECTORY_SEPARATOR . $original);
-      
-      $this->getInvoker()->{$fieldName . '_x1'} = 0;
-      $this->getInvoker()->{$fieldName . '_y1'} = 0;
-      $this->getInvoker()->{$fieldName . '_x2'} = $img->getWidth();
-      $this->getInvoker()->{$fieldName . '_y2'} = $img->getHeight();
     }
 
     $img->resize(400, null);
     $img->saveAs($dir . DIRECTORY_SEPARATOR . $editable);
 
-    $this->getInvoker()->{$fieldName . '_x1'} = 0;
-    $this->getInvoker()->{$fieldName . '_y1'} = 0;
-    $this->getInvoker()->{$fieldName . '_x2'} = $img->getWidth();
-    $this->getInvoker()->{$fieldName . '_y2'} = $img->getHeight();
+
+    if ($imageConfig['ratio'])
+    {
+      $ratioOriginal = $img->getWidth() / $img->getHeight();
+      $ratioDesired = $imageConfig['ratio'];
+
+      if ($ratioDesired >= $ratioOriginal)
+      {
+        $cropWidth = $img->getWidth();
+        $cropHeight = $cropWidth / $ratioDesired;
+      }
+      else
+      {
+        $cropHeight = $img->getHeight();
+        $cropWidth = $cropHeight * $ratioDesired;
+      }
+    }
+    else
+    {
+      $cropWidth = $img->getWidth();
+      $cropHeight = $img->getHeight();
+    }
+
+    $cropLeft = $this->getLeftAlignment($fieldName, $cropWidth, $img->getWidth());
+    $cropTop = $this->getTopAlignment($fieldName, $cropHeight, $img->getHeight());
+
+    $this->getInvoker()->{$fieldName . '_x1'} = $cropLeft;
+    $this->getInvoker()->{$fieldName . '_y1'} = $cropTop;
+    $this->getInvoker()->{$fieldName . '_x2'} = $cropLeft + $cropWidth;
+    $this->getInvoker()->{$fieldName . '_y2'} = $cropTop + $cropHeight;
+  }
+
+  private function getLeftAlignment($fieldName, $innerWidth, $outerWidth)
+  {
+    $config = $this->getAlignmentConfig();
+    $fieldConfig = $this->getImageConfig($fieldName);
+
+    $alignment = isset($fieldConfig['defaultAlignment'])
+      ? $fieldConfig['defaultAlignment'][0]
+      : ($config
+            ? $config[0]
+            : 'left'
+            );
+
+    $left = 0;
+
+    if ($alignment == 'right')
+    {
+      $left = $outerWidth - $innerWidth;
+    }
+    else if (in_array($alignment, array('centre', 'center', 'middle')))
+    {
+      $left = (int)(($outerWidth - $innerWidth) / 2);
+    }
+
+    return $left;
+  }
+
+  private function getTopAlignment($fieldName, $innerHeight, $outerHeight)
+  {
+    $config = $this->getAlignmentConfig();
+    $fieldConfig = $this->getImageConfig($fieldName);
+
+    $alignment = isset($fieldConfig['defaultAlignment'])
+      ? $fieldConfig['defaultAlignment'][1]
+      : ($config
+            ? $config[1]
+            : 'left'
+            );
+
+    $top = 0;
+
+    if ($alignment == 'bottom')
+    {
+      $top = $outerHeight - $innerHeight;
+    }
+    else if (in_array($alignment, array('centre', 'center', 'middle')))
+    {
+      $top = (int)(($outerHeight - $innerHeight) / 2);
+    }
+
+    return $top;
   }
   
   /**
@@ -380,8 +450,11 @@ class Doctrine_Template_JCroppable extends Doctrine_Template
       
     } else if (isset($padding['pixels']) && is_numeric($padding['pixels'])) {
       
-      $width = $img->getWidth() + $padding['pixels'];
-      $height = $img->getHeight() + $padding['pixels'];
+      /**
+       * We multiply by 2 to account for padding on both edges
+       */
+      $width = $img->getWidth() + (2 * $padding['pixels']);
+      $height = $img->getHeight() + (2 * $padding['pixels']);
       
     } else {
       
@@ -549,6 +622,16 @@ class Doctrine_Template_JCroppable extends Doctrine_Template
       
     }
   }
+
+  private function getModelsConfig()
+  {
+    return sfConfig::get('app_sfDoctrineJCroppablePlugin_models');
+  }
+
+  private function getAlignmentConfig()
+  {
+    return sfConfig::get('app_sfDoctrineJCroppablePlugin_defaultAlignment');
+  }
   
   /**
    * Get's the config for the given field's image
@@ -557,7 +640,7 @@ class Doctrine_Template_JCroppable extends Doctrine_Template
    * @return array
    */
   private function getImageConfig($fieldName) {
-    $config = sfConfig::get('app_sfDoctrineJCroppablePlugin_models');
+    $config = $this->getModelsConfig();
     
     if (!isset($config[$this->getTableNameCamelCase()]['images'][$fieldName])) {
       return array('sizes' => array(

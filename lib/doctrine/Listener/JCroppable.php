@@ -30,12 +30,27 @@ class Doctrine_Template_Listener_JCroppable extends Doctrine_Record_Listener
     $this->checkImages($event);
   }
 
+  /**
+   * Removes all image files when the record is deleted
+   * Thanks to Shane McKinley for providing this fix
+   *
+   * @param Doctrine_Event $event
+   */
+  public function preDelete(Doctrine_Event $event)
+  {
+    $invoker = $event->getInvoker();
+    foreach ($this->_options['images'] as $fieldName)
+    {
+      $invoker->removeImages($fieldName, $invoker->$fieldName);
+    }
+  }
+
   private function checkImages(Doctrine_Event $event) {
     $invoker = $event->getInvoker();
 
     $modifiedFields = array_keys($invoker->getModified());
     $imageFieldSuffixes = array('', '_x1', '_y1', '_x2', '_y2');
-//    print("<pre>");var_dump($modifiedFields);exit;
+
     foreach ($this->_options['images'] as $imageName) {
 
       $needsUpdate = false;
