@@ -139,7 +139,13 @@ class Doctrine_Template_JCroppable extends Doctrine_Template
           array('mime_types' => 'Unsupported image type (%mime_type%)')
         )
       );
+
+      $form->mergePostValidator(new sfValidatorImageJCroppable(array(
+        'fieldName' => $fieldName,
+        'fieldValue' => $this->getInvoker()->$fieldName
+        )));
     }
+
   }
   
   /**
