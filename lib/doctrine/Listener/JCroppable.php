@@ -39,6 +39,12 @@ class Doctrine_Template_Listener_JCroppable extends Doctrine_Record_Listener
   public function preDelete(Doctrine_Event $event)
   {
     $invoker = $event->getInvoker();
+
+    if (!method_exists($invoker, 'removeImages'))
+    {
+      return;
+    }
+    
     foreach ($this->_options['images'] as $fieldName)
     {
       $invoker->removeImages($fieldName, $invoker->$fieldName);
