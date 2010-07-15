@@ -543,9 +543,19 @@ class Doctrine_Template_JCroppable extends Doctrine_Template
     if (!$this->getInvoker()->$fieldName || (!$imageConfig && !$force)) {
       return;
     }
-    
-    $this->{$version . 'Images'}[$fieldName] =
-      new sfImage($this->getImageDir() . DIRECTORY_SEPARATOR . $this->getImageFromName($fieldName, $version));
+
+    $imagePath = $this->getImageDir() . DIRECTORY_SEPARATOR . $this->getImageFromName($fieldName, $version);
+
+    /**
+     * Avoid non-existant image problems
+     */
+    try {
+      $this->{$version . 'Images'}[$fieldName] =
+        new sfImage($imagePath);
+    }
+    catch(Exception $e)
+    {
+    }
   }
   
   /**
