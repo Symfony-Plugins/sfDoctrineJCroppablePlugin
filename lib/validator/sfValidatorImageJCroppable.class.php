@@ -25,12 +25,12 @@ class sfValidatorImageJCroppable extends sfValidatorBase
       return $values;
     }
 
-    if ($values[$fieldName . '_x1'] == $values[$fieldName . '_x2'])
+    if ($values[$fieldName . '_x1'] && $values[$fieldName . '_x1'] == $values[$fieldName . '_x2'])
     {
       throw new sfValidatorError($this, 'badcrop');
     }
     
-    if ($values[$fieldName . '_y1'] == $values[$fieldName . '_y2'])
+    if ($values[$fieldName . '_y1'] && $values[$fieldName . '_y1'] == $values[$fieldName . '_y2'])
     {
       throw new sfValidatorError($this, 'badcrop');
     }
