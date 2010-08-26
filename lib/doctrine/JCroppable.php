@@ -349,8 +349,15 @@ class Doctrine_Template_JCroppable extends Doctrine_Template
       
       $img->saveAs($dir . DIRECTORY_SEPARATOR . $original);
     }
+    if($img->getWidth() > 400)
+    {
+      $img->resize(400, null);
+    }
+    else{
+      $height = ($img->getHeight() / $img->getWidth() ) * 400;
+      $img->resize(400, $height);
+    }
 
-    $img->resize(400, null);
     $img->saveAs($dir . DIRECTORY_SEPARATOR . $editable);
 
 
