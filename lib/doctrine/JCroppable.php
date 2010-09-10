@@ -318,7 +318,7 @@ class Doctrine_Template_JCroppable extends Doctrine_Template
         return;
       }
     }
-    else
+    else if (sfContext::hasInstance())
     {
       /**
        * Move the new image to be named as the original
@@ -350,13 +350,12 @@ class Doctrine_Template_JCroppable extends Doctrine_Template
       $img->saveAs($dir . DIRECTORY_SEPARATOR . $original);
     }
     
-    $height = ($img->getHeight() / $img->getWidth() ) * 400;
-    $img->resize(400, $height);
+    $img->resize(400, null, true, true);
 
     $img->saveAs($dir . DIRECTORY_SEPARATOR . $editable);
 
 
-    if ($imageConfig['ratio'])
+    if (isset($imageConfig['ratio']))
     {
       $ratioOriginal = $img->getWidth() / $img->getHeight();
       $ratioDesired = $imageConfig['ratio'];
@@ -579,6 +578,8 @@ class Doctrine_Template_JCroppable extends Doctrine_Template
       return false;
     }
     
+    $fullPath = $this->getImageDir() . DIRECTORY_SEPARATOR . $this->getImageFromName($fieldName, $size);
+    
     $ratio = $this->originalImages[$fieldName]->getWidth() /
       $this->editableImages[$fieldName]->getWidth();
     
@@ -586,7 +587,16 @@ class Doctrine_Template_JCroppable extends Doctrine_Template
     $dims['y'] = (int)$this->getInvoker()->{$fieldName . '_y1'} * $ratio;
     $dims['w'] = (int)($this->getInvoker()->{$fieldName . '_x2'} * $ratio) - $dims['x'];
     $dims['h'] = (int)($this->getInvoker()->{$fieldName . '_y2'} * $ratio) - $dims['y'];
-    
+
+    if ($dims['x'] == 0 && $dims['y'] == 0 && $dims['w'] == $imageConfig['sizes'][$size]['width'])
+    {
+      if (empty($imageConfig['ratio']) || $dims['h'] == (int)($imageConfig['sizes'][$size]['width'] / $imageConfig['ratio']))
+      {
+        copy($this->originalImages[$fieldName]->getFilename(), $fullPath);
+        return;
+      }
+    }
+
     $origCrop = $this->originalImages[$fieldName]
       ->crop($dims['x'], $dims['y'], $dims['w'], $dims['h']);
 
@@ -595,8 +605,6 @@ class Doctrine_Template_JCroppable extends Doctrine_Template
       empty($imageConfig['ratio']) ?
         null :
         round($imageConfig['sizes'][$size]['width'] / $imageConfig['ratio']));
-    
-    $fullPath = $this->getImageDir() . DIRECTORY_SEPARATOR . $this->getImageFromName($fieldName, $size);
     
     $finalCrop->saveAs($fullPath);
   }
