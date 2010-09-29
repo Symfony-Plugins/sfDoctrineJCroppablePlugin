@@ -583,14 +583,14 @@ class Doctrine_Template_JCroppable extends Doctrine_Template
     $ratio = $this->originalImages[$fieldName]->getWidth() /
       $this->editableImages[$fieldName]->getWidth();
     
-    $dims['x'] = (int)$this->getInvoker()->{$fieldName . '_x1'} * $ratio;
-    $dims['y'] = (int)$this->getInvoker()->{$fieldName . '_y1'} * $ratio;
-    $dims['w'] = (int)($this->getInvoker()->{$fieldName . '_x2'} * $ratio) - $dims['x'];
-    $dims['h'] = (int)($this->getInvoker()->{$fieldName . '_y2'} * $ratio) - $dims['y'];
+    $dims['x'] = round($this->getInvoker()->{$fieldName . '_x1'} * $ratio);
+    $dims['y'] = round($this->getInvoker()->{$fieldName . '_y1'} * $ratio);
+    $dims['w'] = round($this->getInvoker()->{$fieldName . '_x2'} * $ratio) - $dims['x'];
+    $dims['h'] = round($this->getInvoker()->{$fieldName . '_y2'} * $ratio) - $dims['y'];
 
     if ($dims['x'] == 0 && $dims['y'] == 0 && $dims['w'] == $imageConfig['sizes'][$size]['width'])
     {
-      if (empty($imageConfig['ratio']) || $dims['h'] == (int)($imageConfig['sizes'][$size]['width'] / $imageConfig['ratio']))
+      if (empty($imageConfig['ratio']) || $dims['h'] == round($imageConfig['sizes'][$size]['width'] / $imageConfig['ratio']))
       {
         copy($this->originalImages[$fieldName]->getFilename(), $fullPath);
         return;
