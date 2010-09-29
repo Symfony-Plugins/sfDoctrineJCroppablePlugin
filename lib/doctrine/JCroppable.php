@@ -605,7 +605,9 @@ class Doctrine_Template_JCroppable extends Doctrine_Template
       empty($imageConfig['ratio']) ?
         null :
         round($imageConfig['sizes'][$size]['width'] / $imageConfig['ratio']));
-    
+
+    $finalCrop->setQuality(85);
+
     $finalCrop->saveAs($fullPath);
   }
   
