@@ -271,6 +271,7 @@ class Doctrine_Template_JCroppable extends Doctrine_Template
    */
   private function createEditableImage($fieldName) {
     $imageConfig = $this->getImageConfig($fieldName);
+    
     /**
      * Get the filenames for the editoable and original versions of the image
      */
@@ -342,21 +343,34 @@ class Doctrine_Template_JCroppable extends Doctrine_Template
     /**
      * Load the original and resize it for the editable version
      */
+    
+    
     $img = new sfImage($dir . DIRECTORY_SEPARATOR . $original);
+   
+   
     
     if (sfContext::hasInstance() && isset($imageConfig['padding'])) {
+      
       $img = $this->addPadding($img, $imageConfig['padding']);
       
       $img->saveAs($dir . DIRECTORY_SEPARATOR . $original);
     }
-    
-    $img->resize(400, null, true, true);
+
+    if(isset($imageConfig['ratio'])){
+      $cropperImageHeight = 400 * $imageConfig['ratio'];
+    }
+    else{
+      $cropperImageHeight = 400 * ($img->getWidth() / $img->getHeight());
+    }
+
+
+    $img->resize(400, $cropperImageHeight, true, true);
 
     $img->saveAs($dir . DIRECTORY_SEPARATOR . $editable);
 
-
     if (isset($imageConfig['ratio']))
     {
+      
       $ratioOriginal = $img->getWidth() / $img->getHeight();
       $ratioDesired = $imageConfig['ratio'];
 
