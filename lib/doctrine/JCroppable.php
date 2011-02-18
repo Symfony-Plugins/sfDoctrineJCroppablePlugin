@@ -356,6 +356,31 @@ class Doctrine_Template_JCroppable extends Doctrine_Template
       $img->saveAs($dir . DIRECTORY_SEPARATOR . $original);
     }
 
+    //Save the original using padding
+    $actualRatio = $img->getWidth() / $img->getHeight();
+    if(($actualRatio > $imageConfig['ratio']) || ($actualRatio < $imageConfig['ratio']))
+    {
+	    if($actualRatio > $imageConfig['ratio'])
+	    {
+	    	$width = $img->getWidth();
+	    	$height = $img->getWidth() / $imageConfig['ratio'];
+	    }else if($actualRatio < $imageConfig['ratio'])
+	    {
+	    	$width = $img->getHeight() * $imageConfig['ratio'];
+	    	$height = $img->getHeight();
+	    }
+	    
+	    $canvas = new sfImage();
+	    $canvas
+	      ->fill(0, 0, isset($padding['color']) ? $padding['color'] : '#ffffff')
+	      ->resize($width, $height)
+	      ->overlay($img, 'center');
+	      
+	    $img = $canvas;      
+	    $img->saveAs($dir . DIRECTORY_SEPARATOR . $original);
+    }
+    
+    
     if(isset($imageConfig['ratio'])){
       $cropperImageHeight = 400 * $imageConfig['ratio'];
     }
