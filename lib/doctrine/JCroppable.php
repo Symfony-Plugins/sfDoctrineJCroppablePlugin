@@ -218,7 +218,7 @@ class Doctrine_Template_JCroppable extends Doctrine_Template
     //if there is no pic do not return the broken markup
     if ($this->getImageFromName($fieldName, $size) != false)
     {
-      $fileSrc = '/' . $fileDir . '/' . $this->getImageFromName($fieldName, $size);
+      $fileSrc = sfContext::getInstance()->getRequest()->getRelativeUrlRoot() . '/' . $fileDir . '/' . $this->getImageFromName($fieldName, $size);
       return $fileSrc;
     }
     else
